@@ -1,0 +1,115 @@
+zimmer:
+  name: Zimmer
+  entities:
+  - group.kinderzimmer
+  - group.gaestezimmer
+  - group.schlafzimmer
+  - group.wohnzimmer
+  - group.bad
+  - group.dusche
+  
+aktuell:
+  name: Aktuell
+  entities:
+  - group.temperatur
+  - group.luftfeuchtigkeit
+  - group.co2
+  - group.thermostate
+  
+zustand:
+  name: Zustand
+  entities:
+  - group.batterie
+  - group.verbindung
+
+
+kinderzimmer:
+  name: Pavel
+  entities: 
+  - sensor.netatmo_kinderzimmer_temperature
+  - sensor.netatmo_kinderzimmer_humidity
+  - sensor.netatmo_kinderzimmer_co2
+  - climate.kinderzimmer
+  - binary_sensor.fensterkontakt
+  
+gaestezimmer:
+  name: Raphael
+  entities: 
+  - sensor.wandthermostat_mit_schaltausgang_fur_markenschalter_temperature
+  - climate.kinderzimmer_2
+  
+schlafzimmer:
+  name: Schlafzimmer
+  entities:
+  - sensor.netatmo_schlafzimmer_temperature
+  - sensor.netatmo_schlafzimmer_humidity
+  - sensor.netatmo_schlafzimmer_co2
+  - climate.schlafzimmer
+  
+wohnzimmer:
+  name: Wohnzimmer
+  entities:
+  - sensor.netatmo_wohnzimmer_temperature
+  - sensor.netatmo_wohnzimmer_humidity
+  - sensor.netatmo_wohnzimmer_co2
+  - sensor.netatmo_wohnzimmer_noise
+  - sensor.netatmo_wohnzimmer_pressure
+  - climate.wohnzimmer  
+  
+bad:
+  name: Bad
+  entities:
+  - climate.bad_oben
+  
+dusche:
+  name: Dusche
+  entities:
+  - climate.bad_unten
+
+  
+temperatur:
+  name: Temperatur
+  entities:
+  - sensor.netatmo_kinderzimmer_temperature
+  - sensor.netatmo_schlafzimmer_temperature
+  - sensor.netatmo_wohnzimmer_temperature
+  - sensor.wandthermostat_mit_schaltausgang_fur_markenschalter_temperature
+  
+luftfeuchtigkeit:
+  name: Luftfeuchtigkeit
+  entities:
+  - sensor.netatmo_kinderzimmer_humidity
+  - sensor.netatmo_schlafzimmer_humidity
+  - sensor.netatmo_wohnzimmer_humidity
+  - sensor.wandthermostat_mit_schaltausgang_fur_markenschalter_humidity
+  
+co2:
+  name: CO2
+  entities:
+  - sensor.netatmo_kinderzimmer_co2
+  - sensor.netatmo_schlafzimmer_co2
+  - sensor.netatmo_wohnzimmer_co2
+  
+thermostate:
+  name: Thermostate
+  entities:
+  - sensor.heizkorperthermostat_heating_4
+  - sensor.heizkorperthermostat_heating
+  - sensor.heizkorperthermostat_heating_2
+  - sensor.heizkorperthermostat_heating_3
+  - sensor.heizkorperthermostat_esszimmer_heating
+  - sensor.heizkorperthermostat_wohnzimmer_heating
+  
+batterie:
+  name: Batterie
+  entities:
+  - sensor.netatmo_kinderzimmer_battery_percent
+  - sensor.netatmo_schlafzimmer_battery_percent
+  - sensor.netatmo_wohnzimmer_battery_percent
+  
+verbindung:
+  name: Verbindung
+  entities:
+  - sensor.netatmo_kinderzimmer_radio
+  - sensor.netatmo_schlafzimmer_radio
+  - sensor.netatmo_wohnzimmer_wifi

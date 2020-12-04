@@ -1,0 +1,141 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 510
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Berlin
+  # Customization file
+  customize: !include customize.yaml
+
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+http:
+  base_url: !secret base_url
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - samsung_printer
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+  exclude:
+    entity_globs:
+      - sensor.timestamp_fronius*
+
+# Enables a map showing the location of tracked devices
+#map:
+
+lovelace:
+
+
+device_tracker:
+  - platform: fritz
+    new_device_defaults:
+      track_new_devices: false
+
+# Track the sun
+sun:
+
+# Netatmo
+netatmo:
+  client_id: !secret netatmo_client_id
+  client_secret: !secret netatmo_client_secret
+  
+# Sensors
+sensor:
+  - platform: template
+    sensors:
+      temperature:
+        friendly_name: "Temperatur"
+        unit_of_measurement: "°C"
+        value_template: "{{ state_attr('weather.home', 'temperature') }}"
+      sun_azimut:
+        friendly_name: "Azimut"
+        unit_of_measurement: '°'
+        value_template: "{{ state_attr('sun.sun', 'azimuth') }}"
+        icon_template: mdi:angle-acute    
+      pv_to_grid: 
+        friendly_name: PV Einspeisung
+        unit_of_measurement: W
+        value_template: "{{ (states('sensor.power_grid_fronius_power_flow_0_http_192_168_178_49') | float * -1) | int }}"
+      pv_production: 
+        friendly_name: PV Produktion
+        unit_of_measurement: W
+        value_template: "{{ states('sensor.power_photovoltaics_fronius_power_flow_0_http_192_168_178_49') | int }}"
+      pv_production_today: 
+        friendly_name: PV Produktion Heute
+        unit_of_measurement: kWh
+        value_template: "{{ ((states('sensor.energy_day_fronius_inverter_1_http_192_168_178_49') | float) / 1000.0) | round(3) }}"
+      pv_production_year: 
+        friendly_name: PV Produktion Jahr
+        unit_of_measurement: kWh
+        value_template: "{{ ((states('sensor.energy_year_fronius_power_flow_0_http_192_168_178_49') | float) / 1000) | int}}"
+
+      
+
+  - platform: fronius
+    scan_interval: 10
+    resource: http://192.168.178.49
+    monitored_conditions:
+      - sensor_type: inverter
+      - sensor_type: power_flow
+
+
+input_boolean:
+  test_switch:
+    name: Test Switch
+
+
+notify:
+  - name: slack
+    platform: slack
+    api_key: !secret slack_api_key
+    default_channel: '#alerts'
+    username: Homebot
+    icon: ":house:"
+
+
+# Mobile App
+mobile_app:
+
+# Cloud
+cloud:
+
+# People
+person:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml

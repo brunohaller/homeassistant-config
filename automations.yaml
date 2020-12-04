@@ -1,0 +1,148 @@
+- id: window_open1
+  alias: Kinderzimmer Fenster offen
+  mode: restart
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kinderzimmer_fenster
+    to: "on"
+    for: 00:05:00
+  action:
+    - service: notify.slack
+      data_template:
+        title: Kinderzimmer offen
+        message:
+          "Kinderzimmer Fenster ist offen für {{ relative_time(states.binary_sensor.kinderzimmer_fenster.last_changed)
+          }}."
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: Kinderzimmer offen
+        data:
+          clickAction: "/lovelace/fenster"
+          tag: fenster1
+          group: fenster
+- id: window_open2
+  alias: Schlafzimmer Fenster offen
+  mode: restart
+  trigger:
+    platform: state
+    entity_id: binary_sensor.schlafzimmer_fenster
+    to: "on"
+    for: 00:05:00
+  action:
+    - service: notify.slack
+      data_template:
+        title: Schlafzimmer offen
+        message:
+          "Schlafzimmer Fenster ist offen für {{ relative_time(states.binary_sensor.schlafzimmer_fenster.last_changed)
+          }}."
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: Schlafzimmer offen
+        data:
+          clickAction: "/lovelace/fenster"
+          tag: fenster2
+          group: fenster
+- id: window_open3
+  alias: Bad oben Fenster offen
+  mode: restart
+  trigger:
+    platform: state
+    entity_id: binary_sensor.bad_oben_fenster
+    to: "on"
+    for: 00:05:00
+  action:
+    - service: notify.slack
+      data_template:
+        title: Bad oben offen
+        message:
+          "Bad oben Fenster ist offen für {{ relative_time(states.binary_sensor.bad_oben_fenster.last_changed)
+          }}."
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: Bad offen
+        data:
+          clickAction: "/lovelace/fenster"
+          tag: fenster3
+          group: fenster
+
+- id: window_close1
+  alias: Kinderzimmer Fenster zu
+  trigger:
+    platform: state
+    entity_id: binary_sensor.kinderzimmer_fenster
+    to: "off"
+  action:
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: clear_notification
+        data:
+          tag: fenster1
+
+- id: window_close2
+  alias: Schlafzimmer Fenster zu
+  trigger:
+    platform: state
+    entity_id: binary_sensor.schlafzimmer_fenster
+    to: "off"
+  action:
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: clear_notification
+        data:
+          tag: fenster2
+
+- id: window_close3
+  alias: Bad oben Fenster zu
+  trigger:
+    platform: state
+    entity_id: binary_sensor.bad_oben_fenster
+    to: "off"
+  action:
+    - service: notify.mobile_app_sm_a715f
+      data:
+        message: clear_notification
+        data:
+          tag: fenster3
+
+
+- id: "1597929394418"
+  alias: Entfeuchter an
+  description: ""
+  trigger:
+    - below: "-5230"
+      entity_id: sensor.power_grid_fronius_power_flow_0_http_192_168_178_49
+      for: 00:00:30
+      platform: numeric_state
+  condition:
+    - condition: device
+      device_id: e3aeeda8bef74da19809b3749a66ca24
+      domain: switch
+      entity_id: switch.plugable_switch_measuring
+      type: is_off
+  action:
+    - device_id: e3aeeda8bef74da19809b3749a66ca24
+      domain: switch
+      entity_id: switch.plugable_switch_measuring
+      type: turn_on
+  mode: single
+- id: "1597929706928"
+  alias: Entfeuchter aus
+  description: ""
+  trigger:
+    - above: "-4700"
+      entity_id: sensor.power_grid_fronius_power_flow_0_http_192_168_178_49
+      for: 00:10:00
+      platform: numeric_state
+  condition:
+    - condition: device
+      device_id: e3aeeda8bef74da19809b3749a66ca24
+      domain: switch
+      entity_id: switch.plugable_switch_measuring
+      type: is_on
+  action:
+    - device_id: e3aeeda8bef74da19809b3749a66ca24
+      domain: switch
+      entity_id: switch.plugable_switch_measuring
+      type: turn_off
+  mode: single
+

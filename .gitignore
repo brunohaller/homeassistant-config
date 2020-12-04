@@ -1,0 +1,8 @@
+.cloud/
+.storage/
+
+*.db
+*.log
+
+known_devices.yaml
+secrets.yaml
